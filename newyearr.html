@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>New Year Countdown 🇬🇭</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle, #000, #020202);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Arial Black', sans-serif;
+  overflow: hidden;
+  color: white;
+}
+
+.container {
+  text-align: center;
+}
+
+.title {
+  font-size: 2.2em;
+  animation: shake 1.2s infinite;
+}
+
+.timer {
+  font-size: 3.2em;
+  margin-top: 10px;
+}
+
+.glow {
+  animation: glow 1s infinite alternate;
+}
+
+.footer {
+  margin-top: 20px;
+  font-size: 1em;
+  opacity: 0.9;
+}
+
+/* Shake */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+/* Glow */
+@keyframes glow {
+  from { text-shadow: 0 0 10px gold; }
+  to { text-shadow: 0 0 40px orange; }
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+  from { transform: translateY(-10vh) rotate(0deg); }
+  to { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* Fireworks */
+.firework {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+  from { transform: scale(1); opacity: 1; }
+  to { transform: scale(8); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="title">🎆 NEW YEAR COUNTDOWN 🎆</div>
+  <div id="timer" class="timer glow">Loading...</div>
+  <div class="footer">Bobby Shai 🇬🇭</div>
+</div>
+
+<audio id="music" src="https://cdn.pixabay.com/audio/2022/10/16/audio_80cfa9c77a.mp3"></audio>
+
+<script>
+const timer = document.getElementById("timer");
+const music = document.getElementById("music");
+music.volume = 1.0;
+
+const now = new Date();
+const newYear = new Date(now.getFullYear() + 1, 0, 1);
+
+function update() {
+  const diff = newYear - new Date();
+
+  if (diff <= 0) {
+    timer.innerHTML = "🎉 HAPPY NEW YEAR 🎉";
+    music.play();
+    fireworks();
+    confetti();
+    clearInterval(loop);
+    return;
+  }
+
+  const s = Math.floor(diff / 1000) % 60;
+  const m = Math.floor(diff / 60000) % 60;
+  const h = Math.floor(diff / 3600000) % 24;
+
+  timer.innerHTML = `${h}h ${m}m<br>${s}s`;
+}
+
+function confetti() {
+  for (let i = 0; i < 120; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    c.style.animationDuration = (Math.random()*2+2)+"s";
+    document.body.appendChild(c);
+  }
+}
+
+function fireworks() {
+  for (let i = 0; i < 40; i++) {
+    const f = document.createElement("div");
+    f.className = "firework";
+    f.style.left = Math.random()*100+"vw";
+    f.style.top = Math.random()*50+"vh";
+    f.style.background = `hsl(${Math.random()*360},100%,60%)`;
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1000);
+  }
+}
+
+const loop = setInterval(update, 1000);
+update();
+</script>
+
+</body>
+</html>
